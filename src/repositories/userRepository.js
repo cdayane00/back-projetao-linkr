@@ -1,12 +1,12 @@
 import { connection } from "../dbStrategy/postgres/postgres.js";
 
 export class UserRepository {
-  static async createUser(name, email, password, imageId) {
+  static async createUser(name, email, password, imageUrl) {
     const query = {
       text: `
-      INSERT INTO users (name, email, password, profile_pic_id)
+      INSERT INTO users (name, email, password, photo)
         VALUES ($1, $2, $3, $4)`,
-      values: [name, email, password, imageId],
+      values: [name, email, password, imageUrl],
     };
 
     return connection.query(query);

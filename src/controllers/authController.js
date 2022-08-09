@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { ImagesRepository } from "../repositories/imagesRepository.js";
 import { UserRepository } from "../repositories/userRepository.js";
 import { sanitizeString } from "../utils/index.js";
 
@@ -8,15 +7,11 @@ export async function createUser(req, res) {
   const { imageUrl, name, email, password } = req.body;
 
   try {
-    const {
-      rows: [image],
-    } = await ImagesRepository.createImage(imageUrl.trim());
-
     await UserRepository.createUser(
       sanitizeString(name),
       sanitizeString(email),
       bcrypt.hashSync(password, 10),
-      image.id
+      imageUrl.trim()
     );
 
     return res.sendStatus(201);
