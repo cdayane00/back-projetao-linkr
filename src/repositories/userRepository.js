@@ -19,7 +19,6 @@ export class UserRepository {
       `,
       values: [email],
     };
-
     return connection.query(query);
   }
 }
