@@ -30,13 +30,17 @@ export async function signIn(req, res) {
     } = await UserRepository.getUserByEmail(email);
 
     if (!user) {
-      res.status(401).alert("Email is incorrect");
+      res.status(401).json({
+        error: "Email is incorrect",
+      });
     }
 
     const passwordValid = bcrypt.compareSync(password, user.password);
 
     if (!passwordValid) {
-      return res.status(401).alert("Password is incorrect");
+      return res.status(401).json({
+        error: "Password is incorrect",
+      });
     }
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
