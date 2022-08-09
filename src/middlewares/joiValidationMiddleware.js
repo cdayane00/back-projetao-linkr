@@ -1,10 +1,14 @@
 import chalk from "chalk";
 
 // Schemas
-import { signUpSchema as signUp } from "../schemas/authSchemas.js";
+import {
+  signInSchema as signIn,
+  signUpSchema as signUp,
+} from "../schemas/authSchemas.js";
 
 const Schemas = {
   signUp,
+  signIn,
 };
 
 export function validateBody(validator) {

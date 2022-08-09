@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUser } from "../controllers/authController.js";
+import { createUser, signIn } from "../controllers/authController.js";
 import { checkIfEmailIsRegistered } from "../middlewares/authMiddlewares.js";
 import { validateBody } from "../middlewares/joiValidationMiddleware.js";
 
@@ -11,3 +11,5 @@ authRouter.post(
   checkIfEmailIsRegistered,
   createUser
 );
+
+authRouter.post("/sign-in", validateBody("signIn"), signIn);
