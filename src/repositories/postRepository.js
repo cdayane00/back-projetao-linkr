@@ -23,4 +23,37 @@ export class PostRepository {
     };
     return connection.query(query);
   }
+
+  static async checkIfExists(id) {
+    const query = {
+      text: `
+      SELECT * FROM posts WHERE id = $1 
+      `,
+      values: [id],
+    };
+    return connection.query(query);
+  }
+
+  static async updatePost(postText, id) {
+    console.log(postText, id);
+    const query = {
+      text: `
+      UPDATE posts
+      SET "postText"= $1
+      WHERE id = $2
+      `,
+      values: [postText, id],
+    };
+    return connection.query(query);
+  }
+
+  static async deletePost(id) {
+    const query = {
+      text: `
+      DELETE FROM posts WHERE id = $1
+      `,
+      values: [id],
+    };
+    return connection.query(query);
+  }
 }
