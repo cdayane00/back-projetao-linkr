@@ -44,7 +44,7 @@ export async function signIn(req, res) {
       expiresIn: process.env.EXPIRES_IN,
     });
 
-    return res.status(200).json({ token });
+    return res.status(200).json({ token, photo: user.photo });
   } catch (error) {
     return res.status(500).json({
       error: error.message,
