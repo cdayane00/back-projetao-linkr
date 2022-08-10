@@ -6,3 +6,15 @@ export function sanitizeString(string) {
 
   return sanitizedString;
 }
+
+export const sanitizeData = (req, res, next) => {
+  const data = req.body;
+  const output = { ...data };
+  for (const param in data) {
+    if (typeof output[param] === "string") {
+      output[param] = stripHtml(data[param]).result.trim();
+    }
+  }
+  res.locals.sanitizedData = output;
+  next();
+};

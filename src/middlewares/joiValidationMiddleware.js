@@ -19,7 +19,7 @@ export function validateBody(validator) {
   }
 
   return (req, res, next) => {
-    const { error } = Schemas[validator].validate(req.body, {
+    const { error } = Schemas[validator].validate(res.locals.sanitizedData, {
       abortEarly: false,
     });
 

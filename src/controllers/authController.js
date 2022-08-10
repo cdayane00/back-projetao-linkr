@@ -1,15 +1,13 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { UserRepository } from "../repositories/userRepository.js";
-import { sanitizeString } from "../utils/index.js";
 
 export async function createUser(req, res) {
-  const { imageUrl, name, email, password } = req.body;
-
+  const { imageUrl, name, email, password } = res.locals.sanitizedData;
   try {
     await UserRepository.createUser(
-      sanitizeString(name),
-      sanitizeString(email),
+      name,
+      email,
       bcrypt.hashSync(password, 10),
       imageUrl.trim()
     );
@@ -17,12 +15,12 @@ export async function createUser(req, res) {
     return res.sendStatus(201);
   } catch (error) {
     console.log(error);
-    return res.sendStatus(500);
+    return res.status(500).send(error);
   }
 }
 
 export async function signIn(req, res) {
-  const { email, password } = req.body;
+  const { email, password } = res.locals.sanitizedData;
 
   try {
     const {
@@ -42,7 +40,6 @@ export async function signIn(req, res) {
         error: "Password is incorrect",
       });
     }
-
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
       expiresIn: process.env.EXPIRES_IN,
     });

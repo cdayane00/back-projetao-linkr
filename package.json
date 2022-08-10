@@ -6,7 +6,7 @@
   "main": "./src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "NODE_ENV=dev nodemon ./src/server.js",
+    "dev": "NODE_ENV=prod nodemon ./src/server.js",
     "start": "NODE_ENV=prod node ./src/server.js"
   },
   "repository": {
@@ -29,7 +29,8 @@
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.3",
-    "string-strip-html": "^11.1.0"
+    "string-strip-html": "^11.1.0",
+    "url-metadata": "^2.5.0"
   },
   "devDependencies": {
     "eslint": "^8.21.0",
