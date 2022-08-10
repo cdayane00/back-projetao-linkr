@@ -26,7 +26,8 @@
         "import/prefer-default-export": "off",
         "no-console": "off",
         "no-underscore-dangle": "off",
-        "no-useless-escape": "off"
+        "no-useless-escape": "off",
+        "consistent-return": "off"
     },
     "settings": {
         "import/resolver": {

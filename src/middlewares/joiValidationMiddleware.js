@@ -5,10 +5,12 @@ import {
   signInSchema as signIn,
   signUpSchema as signUp,
 } from "../schemas/authSchemas.js";
+import { postSchema as post } from "../schemas/postSchemas.js";
 
 const Schemas = {
   signUp,
   signIn,
+  post,
 };
 
 export function validateBody(validator) {
