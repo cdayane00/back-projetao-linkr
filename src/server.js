@@ -4,6 +4,7 @@ import cors from "cors";
 import chalk from "chalk";
 
 import { authRouter } from "./routes/authRoute.js";
+import { hashtagsRouter } from "./routes/hashtagsRoute.js";
 import { postRouter } from "./routes/postRoute.js";
 
 const server = express();
@@ -12,6 +13,8 @@ server.use(json());
 server.use(cors());
 
 server.use(authRouter);
+server.use(hashtagsRouter);
+
 server.use(postRouter);
 const { PORT } = process.env;
 
