@@ -17,7 +17,7 @@ export class PostRepository {
     const query = {
       text: `
       SELECT * FROM posts
-      ORDER BY "createdAt"
+      ORDER BY "createdAt" DESC
       LIMIT 20
       `,
     };
