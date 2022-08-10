@@ -5,10 +5,16 @@ import {
   signInSchema as signIn,
   signUpSchema as signUp,
 } from "../schemas/authSchemas.js";
+import {
+  postSchema as createPost,
+  updateSchema as updatePost,
+} from "../schemas/postSchemas.js";
 
 const Schemas = {
   signUp,
   signIn,
+  createPost,
+  updatePost,
 };
 
 export function validateBody(validator) {
@@ -17,7 +23,7 @@ export function validateBody(validator) {
   }
 
   return (req, res, next) => {
-    const { error } = Schemas[validator].validate(req.body, {
+    const { error } = Schemas[validator].validate(res.locals.sanitizedData, {
       abortEarly: false,
     });
 

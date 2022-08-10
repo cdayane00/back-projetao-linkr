@@ -1,7 +1,7 @@
 import { UserRepository } from "../repositories/userRepository.js";
 
 export async function checkIfEmailIsRegistered(req, res, next) {
-  const { email } = req.body;
+  const { email } = res.locals.sanitizedData;
 
   try {
     const {
@@ -14,7 +14,6 @@ export async function checkIfEmailIsRegistered(req, res, next) {
 
     return next();
   } catch (error) {
-    console.log(error);
     return res.sendStatus(500);
   }
 }
