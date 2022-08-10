@@ -66,7 +66,7 @@ export class HashtagRepository {
                                         'metaText', posts."metaText",
                                         'metaImage', posts."metaImage",
                                         'metaUrl', posts."metaUrl",
-                                        'likeCount', 999) ORDER BY posts."createdAt") AS "hashtagPosts"
+                                        'likeCount', 999) ORDER BY posts."createdAt" DESC) AS "hashtagPosts"
         FROM
         "postsHashtags"
         JOIN

@@ -28,7 +28,7 @@ export async function signIn(req, res) {
     } = await UserRepository.getUserByEmail(email);
 
     if (!user) {
-      res.status(401).json({
+      return res.status(401).json({
         error: "Email is incorrect",
       });
     }
