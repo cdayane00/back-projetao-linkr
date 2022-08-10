@@ -13,6 +13,21 @@ export class HashtagRepository {
     return connection.query(query);
   }
 
+  static async listAllHashtags() {
+    const query = `
+    SELECT 
+      hashtags.id AS "hashtagId",
+      hashtags.hashtag AS "hashtagName",
+      COUNT("postsHashtags"."hashtagId") AS "postsCount"
+    FROM hashtags
+      JOIN "postsHashtags" ON hashtags.id = "postsHashtags"."hashtagId"
+    GROUP BY hashtags.id
+    ORDER BY "postsCount" DESC;
+    `;
+
+    return connection.query(query);
+  }
+
   static async getHashtagByName(hashtagName) {
     const query = {
       text: "SELECT * FROM hashtags WHERE hashtag = $1",

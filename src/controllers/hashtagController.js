@@ -16,3 +16,14 @@ export async function getPostsByHashtagName(req, res) {
     return res.sendStatus(500);
   }
 }
+
+export async function listHashtags(_req, res) {
+  try {
+    const { rows: hashtagsList } = await HashtagRepository.listAllHashtags();
+
+    return res.status(200).send(hashtagsList);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+}
