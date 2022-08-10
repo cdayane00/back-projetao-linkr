@@ -22,7 +22,8 @@ export class HashtagRepository {
     FROM hashtags
       JOIN "postsHashtags" ON hashtags.id = "postsHashtags"."hashtagId"
     GROUP BY hashtags.id
-    ORDER BY "postsCount" DESC;
+    ORDER BY "postsCount" DESC
+    LIMIT 10;
     `;
 
     return connection.query(query);
