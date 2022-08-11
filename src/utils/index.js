@@ -40,8 +40,9 @@ export function buildMultipleInsertsQuery(array, fixedValue = null) {
           `(${SqlString.escape(fixedValue)}, ${SqlString.escape(element)})`
       ),
     ];
+  } else {
+    queryArray = [...array.map((element) => `(${SqlString.escape(element)})`)];
   }
 
-  queryArray = [...array.map((element) => `(${SqlString.escape(element)})`)];
   return queryArray.join(", ");
 }

@@ -17,6 +17,19 @@ export class HashtagRepository {
     return connection.query(query);
   }
 
+  async createRelationPostHashtag(hashtagsIdsArray, postId) {
+    const insert = this.buildMultipleInsertsQuery(hashtagsIdsArray, postId);
+
+    const query = `
+        INSERT INTO "postsHashtags" ("postId", "hashtagId")
+        VALUES ${insert}
+        `;
+
+    return connection.query(query);
+  }
+
+  // Static Methods
+
   static async listAllHashtags() {
     const query = "SELECT * FROM hashtags";
 
@@ -43,18 +56,6 @@ export class HashtagRepository {
     const query = {
       text: "SELECT * FROM hashtags WHERE hashtag = $1",
       values: [hashtagName],
-    };
-
-    return connection.query(query);
-  }
-
-  static async createRelationPostHashtag(postId, hashtagId) {
-    const query = {
-      text: `
-        INSERT INTO "postsHashtags" ("postId", "hashtagId")
-        VALUES ($1, $2)
-        `,
-      values: [postId, hashtagId],
     };
 
     return connection.query(query);
