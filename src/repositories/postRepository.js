@@ -16,7 +16,8 @@ export class PostRepository {
   static async getPosts() {
     const query = {
       text: `
-      SELECT * FROM posts
+      SELECT posts.*, users.name as username, users.photo as photo FROM posts
+      JOIN users ON posts."userId" = users.id
       ORDER BY "createdAt" DESC
       LIMIT 20
       `,
