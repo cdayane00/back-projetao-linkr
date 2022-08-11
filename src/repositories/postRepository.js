@@ -6,7 +6,8 @@ export class PostRepository {
     const query = {
       text: `
         INSERT INTO posts ("postText", "metaTitle", "metaText", "metaUrl", "metaImage", "userId")
-        VALUES ($1, $2, $3, $4, $5, $6)`,
+        VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING id`,
       values: [postText, metaTitle, metaText, metaUrl, metaImage, userId],
     };
 

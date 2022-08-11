@@ -17,9 +17,10 @@ export async function getPostsByHashtagName(req, res) {
   }
 }
 
-export async function listHashtags(_req, res) {
+export async function listTrendingHashtags(_req, res) {
   try {
-    const { rows: hashtagsList } = await HashtagRepository.listAllHashtags();
+    const { rows: hashtagsList } =
+      await HashtagRepository.listTrendingHashtags();
 
     return res.status(200).send(hashtagsList);
   } catch (error) {

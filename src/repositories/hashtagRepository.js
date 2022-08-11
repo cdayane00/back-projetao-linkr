@@ -1,19 +1,29 @@
 import { connection } from "../dbStrategy/postgres/postgres.js";
 
 export class HashtagRepository {
-  static async createHashtag(hashtagName) {
+  constructor(buildMultipleInsertsQuery) {
+    this.buildMultipleInsertsQuery = buildMultipleInsertsQuery;
+  }
+
+  async createHashtag(hashtagArray) {
+    const inserts = this.buildMultipleInsertsQuery(hashtagArray);
     const query = {
       text: `
       INSERT INTO hashtags (hashtag)
-      VALUES ($1)
+      VALUES ${inserts}
       RETURNING id`,
-      values: [hashtagName],
     };
 
     return connection.query(query);
   }
 
   static async listAllHashtags() {
+    const query = "SELECT * FROM hashtags";
+
+    return connection.query(query);
+  }
+
+  static async listTrendingHashtags() {
     const query = `
     SELECT 
       hashtags.id AS "hashtagId",

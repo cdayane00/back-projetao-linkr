@@ -7,7 +7,12 @@ export async function createPost(req, res) {
   const result = await useMetadata(postUrl);
   const post = { ...result, postText, userId };
   try {
-    await PostRepository.createPost(post);
+    const {
+      rows: [queryResult],
+    } = await PostRepository.createPost(post);
+
+    console.log(queryResult.id);
+
     return res.status(201).send(post);
   } catch (error) {
     return res.status(500).json({ error: error.message });
