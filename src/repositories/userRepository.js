@@ -21,4 +21,14 @@ export class UserRepository {
     };
     return connection.query(query);
   }
+
+  static async getUserById(id) {
+    const query = {
+      text: `
+      SELECT * FROM users WHERE id = $1
+      `,
+      values: [id],
+    };
+    return connection.query(query);
+  }
 }
