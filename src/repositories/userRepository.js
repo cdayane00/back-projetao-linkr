@@ -1,3 +1,4 @@
+import sqlstring from "sqlstring";
 import { connection } from "../dbStrategy/postgres/postgres.js";
 
 export class UserRepository {
@@ -23,12 +24,22 @@ export class UserRepository {
   }
 
   static async getUserById(id) {
-    const query = {
-      text: `
-      SELECT * FROM users WHERE id = $1
-      `,
-      values: [id],
-    };
+    const query = sqlstring.format(
+      `
+    SELECT users.id, users.name, users.photo, 
+            json_agg(json_build_object(
+                'postId', posts.id,
+                'postText', posts."postText",
+                'postDate', posts."createdAt", 
+                'metaTitle', posts."metaTitle",
+                'metaText', posts."metaText",
+                'metaImage', posts."metaImage",
+                'metaUrl', posts."metaUrl",
+                'likeCount', 999) ORDER BY posts."createdAt" DESC) AS "userPosts"
+                FROM users LEFT JOIN posts ON posts."userId" = users.id WHERE users.id = ? 
+                GROUP BY users.id`,
+      [id]
+    );
     return connection.query(query);
   }
 }
