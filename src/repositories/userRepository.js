@@ -26,20 +26,26 @@ export class UserRepository {
   static async getUserById(id) {
     const query = sqlstring.format(
       `
-    SELECT users.id, users.name, users.photo, 
-            json_agg(json_build_object(
-                'photo', users.photo,
-                'usermame', users.name,
-                'postId', posts.id,
-                'postText', posts."postText",
-                'postDate', posts."createdAt", 
-                'metaTitle', posts."metaTitle",
-                'metaText', posts."metaText",
-                'metaImage', posts."metaImage",
-                'metaUrl', posts."metaUrl",
-                'likeCount', 999) ORDER BY posts."createdAt" DESC) AS "userPosts"
-                FROM users LEFT JOIN posts ON posts."userId" = users.id WHERE users.id = ? 
-                GROUP BY users.id`,
+    SELECT users.id, users.name, users.photo FROM users WHERE users.id = ?`,
+      [id]
+    );
+    return connection.query(query);
+  }
+
+  static async getPostsByUserId(id) {
+    const query = sqlstring.format(
+      `
+      SELECT
+      posts.id AS "postId",
+      posts."postText",
+      posts."createdAt" AS "postDate",
+      posts."metaTitle", posts."metaText", posts."metaUrl", 
+      users.name AS "username",
+      users.photo AS photo
+      FROM posts
+      JOIN users ON posts."userId" = users.id
+      WHERE posts."userId" = ?
+      ORDER BY posts."createdAt" DESC`,
       [id]
     );
     return connection.query(query);
