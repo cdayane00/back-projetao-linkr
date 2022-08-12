@@ -1,13 +1,28 @@
 import { useMetadata } from "../handlers/metadataHandler.js";
+import { HashtagRepository } from "../repositories/hashtagRepository.js";
 import { PostRepository } from "../repositories/postRepository.js";
+import { buildMultipleInsertsQuery } from "../utils/index.js";
 
 export async function createPost(req, res) {
   const { userId } = res.locals.user;
+  const { hashtagsIds } = res.locals;
   const { postText, postUrl } = res.locals.sanitizedData;
+
+  const hashtagsRepository = new HashtagRepository(buildMultipleInsertsQuery);
+
   const result = await useMetadata(postUrl);
   const post = { ...result, postText, userId };
+
   try {
-    await PostRepository.createPost(post);
+    const {
+      rows: [postCreationResult],
+    } = await PostRepository.createPost(post);
+
+    await hashtagsRepository.createRelationPostHashtag(
+      hashtagsIds,
+      postCreationResult.id
+    );
+
     return res.status(201).send(post);
   } catch (error) {
     return res.status(500).json({ error: error.message });

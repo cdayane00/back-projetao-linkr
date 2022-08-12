@@ -8,6 +8,7 @@ import {
   deletePost,
   updatePost,
 } from "../controllers/postController.js";
+import { handleHashtagsOnPost } from "../middlewares/hashtagMiddlewares.js";
 
 export const postRouter = Router();
 
@@ -16,6 +17,7 @@ postRouter.post(
   tokenAuth,
   sanitizeData,
   validateBody("createPost"),
+  handleHashtagsOnPost,
   createPost
 );
 

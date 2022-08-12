@@ -1,19 +1,42 @@
 import { connection } from "../dbStrategy/postgres/postgres.js";
 
 export class HashtagRepository {
-  static async createHashtag(hashtagName) {
+  constructor(buildMultipleInsertsQuery) {
+    this.buildMultipleInsertsQuery = buildMultipleInsertsQuery;
+  }
+
+  async createHashtag(hashtagArray) {
+    const inserts = this.buildMultipleInsertsQuery(hashtagArray);
     const query = {
       text: `
       INSERT INTO hashtags (hashtag)
-      VALUES ($1)
+      VALUES ${inserts}
       RETURNING id`,
-      values: [hashtagName],
     };
 
     return connection.query(query);
   }
 
+  async createRelationPostHashtag(hashtagsIdsArray, postId) {
+    const insert = this.buildMultipleInsertsQuery(hashtagsIdsArray, postId);
+
+    const query = `
+        INSERT INTO "postsHashtags" ("postId", "hashtagId")
+        VALUES ${insert}
+        `;
+
+    return connection.query(query);
+  }
+
+  // Static Methods
+
   static async listAllHashtags() {
+    const query = "SELECT * FROM hashtags";
+
+    return connection.query(query);
+  }
+
+  static async listTrendingHashtags() {
     const query = `
     SELECT 
       hashtags.id AS "hashtagId",
@@ -38,18 +61,6 @@ export class HashtagRepository {
     return connection.query(query);
   }
 
-  static async createRelationPostHashtag(postId, hashtagId) {
-    const query = {
-      text: `
-        INSERT INTO "postsHashtags" ("postId", "hashtagId")
-        VALUES ($1, $2)
-        `,
-      values: [postId, hashtagId],
-    };
-
-    return connection.query(query);
-  }
-
   static async getHashtagsPosts(hashtagName) {
     const query = {
       text: `
@@ -58,8 +69,8 @@ export class HashtagRepository {
             hashtags.hashtag AS "hashtagName",
             jsonb_agg(jsonb_build_object('postId', posts.id,
                                         'userId', users.id,
-                                        'userName', users.name,
-                                        'userImage', users.photo,
+                                        'username', users.name,
+                                        'photo', users.photo,
                                         'postText', posts."postText",
                                         'postDate', posts."createdAt", 
                                         'metaTitle', posts."metaTitle",
