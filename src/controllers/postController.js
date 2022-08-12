@@ -18,10 +18,12 @@ export async function createPost(req, res) {
       rows: [postCreationResult],
     } = await PostRepository.createPost(post);
 
-    await hashtagsRepository.createRelationPostHashtag(
-      hashtagsIds,
-      postCreationResult.id
-    );
+    if (hashtagsIds[0]) {
+      await hashtagsRepository.createRelationPostHashtag(
+        hashtagsIds,
+        postCreationResult.id
+      );
+    }
 
     return res.status(201).send(post);
   } catch (error) {
