@@ -33,26 +33,29 @@ export async function handleHashtagsOnPost(req, res, next) {
   const { postText } = res.locals.sanitizedData;
   const hashtagRepository = new HashtagRepository(buildMultipleInsertsQuery);
 
-  const hashtagsArray = findHashtagsInsideString(postText);
+  // The new handler comes here
+
+  // const fixedPostText = "";
+  const hashtagsOnPostArray = findHashtagsInsideString(postText);
 
   try {
     const { rows: allHashtags } = await HashtagRepository.listAllHashtags();
     let hashtagsIds = [];
 
-    const filteredNewHashtags = hashtagsArray.filter(
+    const newHashtags = hashtagsOnPostArray.filter(
       (hashtagFromPost) =>
         !allHashtags.some(({ hashtag }) => hashtag === hashtagFromPost)
     );
 
-    const existingHashtags = allHashtags.filter(({ hashtag }) =>
-      hashtagsArray.some((tag) => tag === hashtag)
+    const registeredHashtags = allHashtags.filter(({ hashtag }) =>
+      hashtagsOnPostArray.some((tag) => tag === hashtag)
     );
 
-    hashtagsIds = [...existingHashtags.map((hashtag) => hashtag.id)];
+    hashtagsIds = [...registeredHashtags.map((hashtag) => hashtag.id)];
 
-    if (filteredNewHashtags.length > 0) {
+    if (newHashtags.length > 0) {
       const { rows: insertResult } = await hashtagRepository.createHashtag(
-        filteredNewHashtags
+        newHashtags
       );
 
       insertResult.map(({ id }) => hashtagsIds.push(id));

@@ -30,6 +30,19 @@ export function findHashtagsInsideString(text) {
   return filteredArray;
 }
 
+export function validateHashtagsInsideText(text) {
+  const textWordsArray = text.split(" ").map((word) => word);
+  const regexHashtagPattern = /^#[^ !@#$%^&*(),.?":{}|<>]*$/gi;
+
+  const validatedWordsArray = textWordsArray.map((word) => {
+    if (!word.startsWith("#")) return word;
+    if (!regexHashtagPattern.test(word)) return word.slice(1);
+    return word;
+  });
+
+  return validatedWordsArray.join(" ");
+}
+
 export function buildMultipleInsertsQuery(array, fixedValue = null) {
   let queryArray = [];
 
