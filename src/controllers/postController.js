@@ -54,6 +54,9 @@ export async function deletePost(req, res) {
         .status(401)
         .json({ error: "You're not the owner of this post." });
     }
+
+    await HashtagRepository.deleteAllRelationsPostHashtag(id);
+
     await PostRepository.deletePost(id);
     return res.sendStatus(204);
   } catch (error) {
