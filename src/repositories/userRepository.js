@@ -28,6 +28,8 @@ export class UserRepository {
       `
     SELECT users.id, users.name, users.photo, 
             json_agg(json_build_object(
+                'userPhoto', users.photo,
+                'userName', users.name,
                 'postId', posts.id,
                 'postText', posts."postText",
                 'postDate', posts."createdAt", 
