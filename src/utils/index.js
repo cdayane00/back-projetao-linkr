@@ -23,23 +23,36 @@ export const sanitizeData = (req, res, next) => {
 export function findHashtagsInsideString(text) {
   const textWordsArray = text.split(" ").map((word) => word.trim());
 
-  const filteredArray = textWordsArray
+  const hashtagsArray = textWordsArray
     .filter((word) => word.startsWith("#"))
     .map((word) => word.slice(1));
 
-  return filteredArray;
+  return hashtagsArray;
 }
 
 export function validateHashtagsInsideText(text) {
   const textWordsArray = text.split(" ").map((word) => word);
-  const regexHashtagPattern = /^#[^ !@#$%^&*(),.?":{}|<>]*$/gi;
 
-  const validatedWordsArray = textWordsArray.map((word) => {
-    if (!word.startsWith("#")) return word;
-    if (!regexHashtagPattern.test(word)) return word.slice(1);
-    return word;
-  });
+  const checkString = (string) => {
+    if (!string.startsWith("#")) {
+      return string;
+    }
 
+    let lastChar = "";
+
+    if (string.slice(-1).match(/[.,\/!?\;:]/g)) {
+      lastChar = string.slice(-1);
+    }
+
+    return (
+      string.charAt(0) +
+      string.slice(1).replace(/[.,\/!?$%\^&\*;:{}@#=\`~()]/g, "") +
+      lastChar
+    );
+  };
+
+  const validatedWordsArray = textWordsArray.map(checkString);
+  console.log(validatedWordsArray.join(" "));
   return validatedWordsArray.join(" ");
 }
 

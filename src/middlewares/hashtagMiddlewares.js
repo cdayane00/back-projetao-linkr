@@ -2,6 +2,7 @@ import { HashtagRepository } from "../repositories/hashtagRepository.js";
 import {
   buildMultipleInsertsQuery,
   findHashtagsInsideString,
+  validateHashtagsInsideText,
 } from "../utils/index.js";
 
 export async function checkIfHashtagExists(req, res, next) {
@@ -34,6 +35,8 @@ export async function handleHashtagsOnPost(req, res, next) {
   const hashtagRepository = new HashtagRepository(buildMultipleInsertsQuery);
 
   // The new handler comes here
+
+  const hashtagStrippedPostText = validateHashtagsInsideText();
 
   // const fixedPostText = "";
   const hashtagsOnPostArray = findHashtagsInsideString(postText);
