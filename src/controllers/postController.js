@@ -86,6 +86,8 @@ export async function updatePost(req, res) {
         .json({ error: "You're not the owner of this post." });
     }
 
+    await HashtagRepository.deleteAllRelationsPostHashtag(id);
+
     if (hashtagsIds[0]) {
       await hashtagsRepository.createRelationPostHashtag(hashtagsIds, id);
     }
