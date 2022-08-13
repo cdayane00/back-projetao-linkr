@@ -32,6 +32,13 @@ export class UserRepository {
     return connection.query(query);
   }
 
+  static async getUsersByName(name) {
+    const query = `SELECT users.id, users.name, users.photo FROM users WHERE users.name ILIKE ${sqlstring.escape(
+      `${name}%`
+    )}`;
+    return connection.query(query);
+  }
+
   static async getPostsByUserId(id) {
     const query = sqlstring.format(
       `
