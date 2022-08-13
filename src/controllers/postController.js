@@ -5,8 +5,8 @@ import { buildMultipleInsertsQuery } from "../utils/index.js";
 
 export async function createPost(req, res) {
   const { userId } = res.locals.user;
-  const { hashtagsIds } = res.locals;
-  const { postText, postUrl } = res.locals.sanitizedData;
+  const { hashtagsIds, hashtagStrippedPostText: postText } = res.locals;
+  const { postUrl } = res.locals.sanitizedData;
 
   const hashtagsRepository = new HashtagRepository(buildMultipleInsertsQuery);
 
