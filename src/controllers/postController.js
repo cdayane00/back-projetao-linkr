@@ -69,7 +69,9 @@ export async function deletePost(req, res) {
 export async function updatePost(req, res) {
   const { id } = req.query;
   const { userId } = res.locals.user;
-  const { postText } = res.locals.sanitizedData;
+  const { hashtagsIds, hashtagStrippedPostText: postText } = res.locals;
+
+  const hashtagsRepository = new HashtagRepository(buildMultipleInsertsQuery);
 
   try {
     const {
@@ -83,6 +85,13 @@ export async function updatePost(req, res) {
         .status(401)
         .json({ error: "You're not the owner of this post." });
     }
+
+    await HashtagRepository.deleteAllRelationsPostHashtag(id);
+
+    if (hashtagsIds[0]) {
+      await hashtagsRepository.createRelationPostHashtag(hashtagsIds, id);
+    }
+
     await PostRepository.updatePost(postText, id);
     return res.sendStatus(201);
   } catch (error) {
