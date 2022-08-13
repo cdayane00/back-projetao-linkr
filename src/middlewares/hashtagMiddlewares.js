@@ -35,11 +35,8 @@ export async function handleHashtagsOnPost(req, res, next) {
   const hashtagRepository = new HashtagRepository(buildMultipleInsertsQuery);
 
   // The new handler comes here
-
-  const hashtagStrippedPostText = validateHashtagsInsideText();
-
-  // const fixedPostText = "";
-  const hashtagsOnPostArray = findHashtagsInsideString(postText);
+  const hashtagStrippedPostText = validateHashtagsInsideText(postText);
+  const hashtagsOnPostArray = findHashtagsInsideString(hashtagStrippedPostText);
 
   try {
     const { rows: allHashtags } = await HashtagRepository.listAllHashtags();
@@ -65,10 +62,11 @@ export async function handleHashtagsOnPost(req, res, next) {
     }
 
     res.locals.hashtagsIds = hashtagsIds;
+    res.locals.hashtagStrippedPostText = hashtagStrippedPostText;
 
     return next();
   } catch (error) {
     console.log(error);
-    return res.sendStatus(500);
+    return res.status(500).json({ error: "Internal Error" });
   }
 }

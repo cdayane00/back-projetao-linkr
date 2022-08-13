@@ -41,18 +41,17 @@ export function validateHashtagsInsideText(text) {
     let lastChar = "";
 
     if (string.slice(-1).match(/[.,\/!?\;:]/g)) {
-      lastChar = string.slice(-1);
+      lastChar = ` ${string.slice(-1)}`;
     }
 
     return (
       string.charAt(0) +
-      string.slice(1).replace(/[.,\/!?$%\^&\*;:{}@#=\`~()]/g, "") +
+      string.slice(1).replace(/[.,\/!?$%\\^&\*;:{}@#=\`~()]/g, "") +
       lastChar
     );
   };
 
   const validatedWordsArray = textWordsArray.map(checkString);
-  console.log(validatedWordsArray.join(" "));
   return validatedWordsArray.join(" ");
 }
 
