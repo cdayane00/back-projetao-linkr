@@ -39,7 +39,7 @@ export class UserRepository {
       posts.id AS "postId",
       posts."postText",
       posts."createdAt" AS "postDate",
-      posts."metaTitle", posts."metaText", posts."metaUrl", 
+      posts."metaTitle", posts."metaText", posts."metaUrl", posts."metaImage",
       users.name AS "username",
       users.photo AS photo
       FROM posts
