@@ -5,8 +5,8 @@ import { buildMultipleInsertsQuery } from "../utils/index.js";
 
 export async function createPost(req, res) {
   const { userId } = res.locals.user;
-  const { hashtagsIds } = res.locals;
-  const { postText, postUrl } = res.locals.sanitizedData;
+  const { hashtagsIds, hashtagStrippedPostText: postText } = res.locals;
+  const { postUrl } = res.locals.sanitizedData;
 
   const hashtagsRepository = new HashtagRepository(buildMultipleInsertsQuery);
 
@@ -18,10 +18,12 @@ export async function createPost(req, res) {
       rows: [postCreationResult],
     } = await PostRepository.createPost(post);
 
-    await hashtagsRepository.createRelationPostHashtag(
-      hashtagsIds,
-      postCreationResult.id
-    );
+    if (hashtagsIds[0]) {
+      await hashtagsRepository.createRelationPostHashtag(
+        hashtagsIds,
+        postCreationResult.id
+      );
+    }
 
     return res.status(201).send(post);
   } catch (error) {
@@ -54,6 +56,9 @@ export async function deletePost(req, res) {
         .status(401)
         .json({ error: "You're not the owner of this post." });
     }
+
+    await HashtagRepository.deleteAllRelationsPostHashtag(id);
+
     await PostRepository.deletePost(id);
     return res.sendStatus(204);
   } catch (error) {

@@ -96,4 +96,16 @@ export class HashtagRepository {
 
     return connection.query(query);
   }
+
+  static async deleteAllRelationsPostHashtag(postId) {
+    const query = {
+      text: `
+        DELETE FROM "postsHashtags"
+        WHERE "postId" = $1
+      `,
+      values: [postId],
+    };
+
+    return connection.query(query);
+  }
 }
