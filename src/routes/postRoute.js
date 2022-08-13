@@ -30,5 +30,6 @@ postRouter.patch(
   tokenAuth,
   sanitizeData,
   validateBody("updatePost"),
+  handleHashtagsOnPost,
   updatePost
 );
