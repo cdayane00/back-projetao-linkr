@@ -1,5 +1,6 @@
 import { useMetadata } from "../handlers/metadataHandler.js";
 import { HashtagRepository } from "../repositories/hashtagRepository.js";
+import { LikesRepository } from "../repositories/likesRepository.js";
 import { PostRepository } from "../repositories/postRepository.js";
 import { buildMultipleInsertsQuery } from "../utils/index.js";
 
@@ -94,6 +95,30 @@ export async function updatePost(req, res) {
 
     await PostRepository.updatePost(postText, id);
     return res.sendStatus(201);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+export async function likeAPost(req, res) {
+  const { userId, postId } = req.params;
+
+  try {
+    await LikesRepository.likePost(postId, userId);
+
+    return res.sendStatus(200);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+export async function dislikeAPost(req, res) {
+  const { userId, postId } = req.params;
+
+  try {
+    await LikesRepository.dislikePost(postId, userId);
+
+    return res.sendStatus(200);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

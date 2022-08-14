@@ -7,8 +7,14 @@ import {
   listPosts,
   deletePost,
   updatePost,
+  likeAPost,
+  dislikeAPost,
 } from "../controllers/postController.js";
 import { handleHashtagsOnPost } from "../middlewares/hashtagMiddlewares.js";
+import {
+  checkLikeStatus,
+  validateUserAndPost,
+} from "../middlewares/likesMiddlewares.js";
 
 export const postRouter = Router();
 
@@ -32,4 +38,20 @@ postRouter.patch(
   validateBody("updatePost"),
   handleHashtagsOnPost,
   updatePost
+);
+
+postRouter.post(
+  "/post/:postId/like/:userId",
+  tokenAuth,
+  validateUserAndPost,
+  checkLikeStatus("like"),
+  likeAPost
+);
+
+postRouter.post(
+  "/post/:postId/dislike/:userId",
+  tokenAuth,
+  validateUserAndPost,
+  checkLikeStatus("dislike"),
+  dislikeAPost
 );
