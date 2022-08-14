@@ -9,9 +9,9 @@ CREATE TABLE "users" (
 
 CREATE TABLE "posts" (
     "id" SERIAL PRIMARY KEY NOT NULL,
-    "postText" TEXT NOT NULL,
-    "metaTitle" TEXT NOT NULL,
-    "metaText" TEXT NOT NULL,
+    "postText" TEXT,
+    "metaTitle" TEXT,
+    "metaText" TEXT,
     "metaUrl" TEXT NOT NULL,
     "metaImage" TEXT NOT NULL,
     "userId" INTEGER NOT NULL REFERENCES users(id),
