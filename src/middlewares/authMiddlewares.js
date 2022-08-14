@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { UserRepository } from "../repositories/userRepository.js";
 
 export async function checkIfEmailIsRegistered(req, res, next) {
@@ -9,11 +10,14 @@ export async function checkIfEmailIsRegistered(req, res, next) {
     } = await UserRepository.getUserByEmail(email);
 
     if (user) {
-      return res.sendStatus(409);
+      console.log(chalk.red.bold("Conflict: user is already registered"));
+      return res
+        .status(409)
+        .json({ error: "This email is already being used" });
     }
 
     return next();
   } catch (error) {
-    return res.sendStatus(500);
+    return res.status(500).json({ error: error.message });
   }
 }
