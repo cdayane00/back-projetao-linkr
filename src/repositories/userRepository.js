@@ -43,16 +43,33 @@ export class UserRepository {
     const query = sqlstring.format(
       `
       SELECT
-      posts.id AS "postId",
-      posts."postText",
-      posts."createdAt" AS "postDate",
-      posts."metaTitle", posts."metaText", posts."metaUrl", posts."metaImage",
-      users.name AS "username",
-      users.photo AS photo
-      FROM posts
-      JOIN users ON posts."userId" = users.id
-      WHERE posts."userId" = ?
-      ORDER BY posts."createdAt" DESC`,
+        posts.id AS "postId",
+        posts."postText",
+        posts."createdAt" AS "postDate",
+        posts."userId",
+        users.name AS "username",
+        users.photo,
+        posts."metaTitle",
+          posts."metaText",
+        posts."metaImage",
+        posts."metaUrl",
+        COUNT(likes.id) AS "likeCount",
+        jsonb_agg(jsonb_build_object('userId', likes."userId", 'likedBy', users_likes.name))  AS "postLikesData"
+      FROM
+        posts
+        JOIN
+          users ON posts."userId" = users.id
+        LEFT JOIN
+          likes ON posts.id = likes."postId"
+        LEFT JOIN
+          users AS users_likes ON likes."userId" = users_likes.id
+      WHERE
+        users.id = ?
+      GROUP BY
+        posts.id, users.id
+      ORDER BY
+        posts."createdAt" DESC
+    `,
       [id]
     );
     return connection.query(query);

@@ -6,9 +6,9 @@ export async function getPostsByHashtagName(req, res) {
   try {
     const { hashtag: name } = hashtag;
 
-    const {
-      rows: [postsByHashtag],
-    } = await HashtagRepository.getHashtagsPosts(name);
+    const { rows: postsByHashtag } = await HashtagRepository.getHashtagsPosts(
+      name
+    );
 
     return res.status(200).send(postsByHashtag);
   } catch (error) {
