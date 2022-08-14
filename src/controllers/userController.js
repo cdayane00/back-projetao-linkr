@@ -26,7 +26,7 @@ export async function getUserById(req, res) {
 }
 
 export async function getUsersByName(req, res) {
-  const { name } = req.params;
+  const { name } = req.query;
 
   try {
     const { rows: user } = await UserRepository.getUsersByName(name);
