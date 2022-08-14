@@ -41,7 +41,7 @@ postRouter.patch(
 );
 
 postRouter.post(
-  "/post/:postId/like/:userId",
+  "/post/:postId/like",
   tokenAuth,
   validateUserAndPost,
   checkLikeStatus("like"),
@@ -49,7 +49,7 @@ postRouter.post(
 );
 
 postRouter.post(
-  "/post/:postId/dislike/:userId",
+  "/post/:postId/dislike",
   tokenAuth,
   validateUserAndPost,
   checkLikeStatus("dislike"),

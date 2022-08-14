@@ -4,7 +4,8 @@ import { PostRepository } from "../repositories/postRepository.js";
 import { UserRepository } from "../repositories/userRepository.js";
 
 export async function validateUserAndPost(req, res, next) {
-  const { userId, postId } = req.params;
+  const { postId } = req.params;
+  const { userId } = res.locals.user;
 
   try {
     const {
@@ -38,7 +39,8 @@ export function checkLikeStatus(likeRoute) {
   }
 
   return async function handleLike(req, res, next) {
-    const { userId, postId } = req.params;
+    const { postId } = req.params;
+    const { userId } = res.locals.user;
 
     try {
       const {

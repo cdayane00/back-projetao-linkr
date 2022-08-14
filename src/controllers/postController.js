@@ -101,7 +101,8 @@ export async function updatePost(req, res) {
 }
 
 export async function likeAPost(req, res) {
-  const { userId, postId } = req.params;
+  const { postId } = req.params;
+  const { userId } = res.locals.user;
 
   try {
     await LikesRepository.likePost(postId, userId);
@@ -113,7 +114,8 @@ export async function likeAPost(req, res) {
 }
 
 export async function dislikeAPost(req, res) {
-  const { userId, postId } = req.params;
+  const { postId } = req.params;
+  const { userId } = res.locals.user;
 
   try {
     await LikesRepository.dislikePost(postId, userId);
