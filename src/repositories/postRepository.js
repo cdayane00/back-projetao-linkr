@@ -17,10 +17,26 @@ export class PostRepository {
   static async getPosts() {
     const query = {
       text: `
-      SELECT posts.*, users.name as username, users.photo as photo FROM posts
-      JOIN users ON posts."userId" = users.id
-      ORDER BY "createdAt" DESC
-      LIMIT 20
+      SELECT
+        posts.id AS "postId",
+        posts."postText",
+        posts."createdAt" AS "postsDate",
+        posts."metaTitle", posts."metaText", posts."metaUrl", posts."metaImage",
+        posts."userId",
+        users."name" AS "username",
+        users."photo" AS "photo",
+        COUNT(likes.id) AS "likeCount",
+        jsonb_agg(jsonb_build_object('userId', likes."userId", 'likedBy', users_likes.name))  AS "postLikesData"
+      FROM
+        posts
+        JOIN 
+          users ON posts."userId" = users.id
+        LEFT JOIN
+          likes ON posts.id = likes."postId"
+        LEFT JOIN users AS users_likes ON likes."userId" = users_likes.id
+      GROUP BY posts.id, users.id
+      ORDER BY posts."createdAt" DESC
+      LIMIT 20;
       `,
     };
     return connection.query(query);

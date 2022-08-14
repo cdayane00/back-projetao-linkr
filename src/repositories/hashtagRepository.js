@@ -64,32 +64,37 @@ export class HashtagRepository {
   static async getHashtagsPosts(hashtagName) {
     const query = {
       text: `
-        SELECT
-            hashtags.id AS "hashtagId",
-            hashtags.hashtag AS "hashtagName",
-            jsonb_agg(jsonb_build_object('postId', posts.id,
-                                        'userId', users.id,
-                                        'username', users.name,
-                                        'photo', users.photo,
-                                        'postText', posts."postText",
-                                        'postDate', posts."createdAt", 
-                                        'metaTitle', posts."metaTitle",
-                                        'metaText', posts."metaText",
-                                        'metaImage', posts."metaImage",
-                                        'metaUrl', posts."metaUrl",
-                                        'likeCount', 999) ORDER BY posts."createdAt" DESC) AS "hashtagPosts"
-        FROM
+      SELECT
+        posts.id AS "postId",
+        posts."postText",
+        posts."createdAt" AS "postDate",
+        posts."userId",
+        users.name AS "username",
+        users.photo,
+        posts."metaTitle",
+        posts."metaText",
+        posts."metaImage",
+        posts."metaUrl",
+        COUNT(likes.id) AS "likeCount",
+        jsonb_agg(jsonb_build_object('userId', likes."userId", 'likedBy', users_likes.name))  AS "postLikesData"
+      FROM
         "postsHashtags"
         JOIN
-            hashtags ON "postsHashtags"."hashtagId" = hashtags.id
+          hashtags ON "postsHashtags"."hashtagId" = hashtags.id
         RIGHT JOIN
-            posts ON "postsHashtags"."postId" = posts.id
+          posts ON "postsHashtags"."postId" = posts.id
         JOIN
-            users ON posts."userId" = users.id
-        WHERE
-            hashtags.hashtag = $1
-        GROUP BY
-            hashtags.id;
+          users ON posts."userId" = users.id
+        LEFT JOIN
+          likes ON posts.id = likes."postId"
+        LEFT JOIN
+          users AS users_likes ON likes."userId" = users_likes.id
+      WHERE
+        hashtags.hashtag = $1
+      GROUP BY
+        hashtags.id, posts.id, users.id
+      ORDER BY
+        posts."createdAt" DESC;
       `,
       values: [hashtagName],
     };
