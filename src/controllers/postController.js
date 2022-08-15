@@ -59,6 +59,7 @@ export async function deletePost(req, res) {
     }
 
     await HashtagRepository.deleteAllRelationsPostHashtag(id);
+    await LikesRepository.deleteAllLikeRelation(id);
 
     await PostRepository.deletePost(id);
     return res.sendStatus(204);
