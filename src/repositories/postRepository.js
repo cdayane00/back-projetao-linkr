@@ -53,7 +53,6 @@ export class PostRepository {
   }
 
   static async updatePost(postText, id) {
-    console.log(postText, id);
     const query = {
       text: `
       UPDATE posts

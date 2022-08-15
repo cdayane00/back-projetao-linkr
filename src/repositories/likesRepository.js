@@ -33,4 +33,16 @@ export class LikesRepository {
 
     return connection.query(query);
   }
+
+  static async deleteAllLikeRelation(postId) {
+    const query = {
+      text: `
+        DELETE FROM likes
+        WHERE "postId" = $1
+      `,
+      values: [postId],
+    };
+
+    return connection.query(query);
+  }
 }
