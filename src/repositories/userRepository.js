@@ -113,4 +113,13 @@ export class UserRepository {
     );
     return connection.query(query);
   }
+
+  static async userFollowsSomeone(userId) {
+    const query = {
+      text: `SELECT FROM followers
+      WHERE "whoFollow"= $1`,
+      values: [userId],
+    };
+    return connection.query(query);
+  }
 }
