@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 
 export async function tokenAuth(req, res, next) {
   const { authorization } = req.headers;
+  console.log(req.headers);
   const token = authorization?.replace("Bearer ", "");
   if (token === null) {
     return res.status(401).json({ error: "'Null' is not a token." });
