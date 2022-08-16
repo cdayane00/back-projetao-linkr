@@ -1,23 +1,32 @@
 import { UserRepository } from "../repositories/userRepository.js";
 
 export async function getUserById(req, res) {
+  const { userId } = res.locals.user;
   const { id } = req.params;
-  console.log(id);
-
+  let follow;
   try {
     const {
       rows: [user],
     } = await UserRepository.getUserById(id);
-
-    const { rows: posts } = await UserRepository.getPostsByUserId(id);
 
     if (!user) {
       return res.status(404).json({
         error: "User not found",
       });
     }
+    const {
+      rows: [interaction],
+    } = await UserRepository.thisInteractionExists(userId, id);
 
-    return res.status(200).json({ user, posts });
+    if (!interaction) {
+      follow = { interaction: false };
+    }
+    if (interaction) {
+      follow = { interaction: true };
+    }
+    const { rows: posts } = await UserRepository.getPostsByUserId(id);
+
+    return res.status(200).json({ user, posts, follow });
   } catch (error) {
     return res.status(500).json({
       error: error.message,
