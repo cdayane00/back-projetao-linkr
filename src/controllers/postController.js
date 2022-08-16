@@ -3,6 +3,7 @@ import { HashtagRepository } from "../repositories/hashtagRepository.js";
 import { LikesRepository } from "../repositories/likesRepository.js";
 import { PostRepository } from "../repositories/postRepository.js";
 import { buildMultipleInsertsQuery } from "../utils/index.js";
+import { UserRepository } from "../repositories/userRepository.js";
 
 export async function createPost(req, res) {
   const { userId } = res.locals.user;
@@ -35,6 +36,11 @@ export async function createPost(req, res) {
 export async function listPosts(req, res) {
   const { userId } = res.locals.user;
   try {
+    const {
+      rows: [interaction],
+    } = await UserRepository.userFollowsSomeone(userId);
+
+    if (!interaction) return res.status(200).send(interaction);
     const { rows } = await PostRepository.getPosts(userId);
     return res.status(200).send(rows);
   } catch (error) {
