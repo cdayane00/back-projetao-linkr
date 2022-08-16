@@ -64,7 +64,6 @@ export async function followAnUser(req, res) {
 export async function unfollowAnUser(req, res) {
   const { userId } = res.locals.user;
   const { id } = req.params;
-
   try {
     const {
       rows: [interaction],
@@ -74,8 +73,10 @@ export async function unfollowAnUser(req, res) {
         .status(409)
         .json({ error: "You do not follow this user, please reload the page" });
     }
+    await UserRepository.unfollowThisUser(userId, id);
     return res.status(204).send("You are no longer following this user");
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       error: error.message,
     });

@@ -76,10 +76,10 @@ export class UserRepository {
   }
 
   static async thisInteractionExists(userId, id) {
-    const query = connection.query(
+    const query = sqlstring.format(
       `
       SELECT * FROM followers
-      WHERE "whoFollow" = $1 AND "followedId" = $2
+      WHERE "whoFollow" = ? AND "followedId" = ?
       `,
       [userId, id]
     );
@@ -87,22 +87,22 @@ export class UserRepository {
   }
 
   static async followThisUser(userId, id) {
-    const query = connection.query(
+    const query = sqlstring.format(
       `
     INSERT INTO followers
-    ("whoFollowed", "followedId")
+    ("whoFollow", "followedId")
     VALUES
-    ($1, $2)`,
+    (?, ?)`,
       [userId, id]
     );
     return connection.query(query);
   }
 
   static async unfollowThisUser(userId, id) {
-    const query = connection.query(
+    const query = sqlstring.format(
       `
     DELETE FROM followers
-    WHERE "whoFollowed" = $1 AND "followedId" = $2
+    WHERE "whoFollow" = ? AND "followedId" = ?
     `,
       [userId, id]
     );
