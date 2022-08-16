@@ -9,6 +9,7 @@ import {
   updatePost,
   likeAPost,
   dislikeAPost,
+  commentOnPost,
 } from "../controllers/postController.js";
 import { handleHashtagsOnPost } from "../middlewares/hashtagMiddlewares.js";
 import {
@@ -54,4 +55,13 @@ postRouter.post(
   validateUserAndPost,
   checkLikeStatus("dislike"),
   dislikeAPost
+);
+
+postRouter.post(
+  "/post/:postId/comment",
+  tokenAuth,
+  validateUserAndPost,
+  sanitizeData,
+  validateBody("createComment"),
+  commentOnPost
 );

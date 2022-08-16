@@ -9,12 +9,14 @@ import {
   postSchema as createPost,
   updateSchema as updatePost,
 } from "../schemas/postSchemas.js";
+import { commentSchema as createComment } from "../schemas/commentSchema.js";
 
 const Schemas = {
   signUp,
   signIn,
   createPost,
   updatePost,
+  createComment,
 };
 
 export function validateBody(validator) {
