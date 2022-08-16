@@ -26,7 +26,12 @@ export class UserRepository {
   static async getUserById(id) {
     const query = sqlstring.format(
       `
-    SELECT users.id, users.name, users.photo FROM users WHERE users.id = ?`,
+    SELECT users.id, users.name, users.photo,
+    COALESCE(COUNT(followers."followedId"), 0) as "followersCount"
+    FROM users
+    LEFT JOIN followers ON followers."followedId" = users.id
+    WHERE users.id = ?
+    GROUP BY users.id`,
       [id]
     );
     return connection.query(query);

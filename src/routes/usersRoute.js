@@ -9,7 +9,7 @@ import { tokenAuth } from "../middlewares/tokenMiddleware.js";
 
 export const userRoute = Router();
 
-userRoute.get("/user/:id", getUserById);
-userRoute.get("/users/", getUsersByName);
+userRoute.get("/user/:id", tokenAuth, getUserById);
+userRoute.get("/users/", tokenAuth, getUsersByName);
 userRoute.post("/user/:id/follow", tokenAuth, followAnUser);
 userRoute.post("/user/:id/unfollow", tokenAuth, unfollowAnUser);
