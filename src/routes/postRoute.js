@@ -9,13 +9,16 @@ import {
   updatePost,
   likeAPost,
   dislikeAPost,
-  commentOnPost,
 } from "../controllers/postController.js";
 import { handleHashtagsOnPost } from "../middlewares/hashtagMiddlewares.js";
 import {
   checkLikeStatus,
   validateUserAndPost,
 } from "../middlewares/likesMiddlewares.js";
+import {
+  commentOnPost,
+  getPostsComments,
+} from "../controllers/commentsController.js";
 
 export const postRouter = Router();
 
@@ -64,4 +67,11 @@ postRouter.post(
   sanitizeData,
   validateBody("createComment"),
   commentOnPost
+);
+
+postRouter.get(
+  "/post/:postId/comment",
+  tokenAuth,
+  validateUserAndPost,
+  getPostsComments
 );

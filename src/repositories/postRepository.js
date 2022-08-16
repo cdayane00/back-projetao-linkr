@@ -73,16 +73,4 @@ export class PostRepository {
     };
     return connection.query(query);
   }
-
-  static async createComment(whoCommentedId, postId, commentText) {
-    const query = {
-      text: `
-        INSERT INTO comments ("whoCommented", "postId", "comment")
-        VALUES ($1, $2, $3)
-      `,
-      values: [whoCommentedId, postId, commentText],
-    };
-
-    return connection.query(query);
-  }
 }
