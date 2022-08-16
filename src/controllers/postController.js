@@ -33,8 +33,9 @@ export async function createPost(req, res) {
 }
 
 export async function listPosts(req, res) {
+  const { userId } = res.locals.user;
   try {
-    const { rows } = await PostRepository.getPosts();
+    const { rows } = await PostRepository.getPosts(userId);
     return res.status(200).send(rows);
   } catch (error) {
     return res.status(500).json({ error: error.message });

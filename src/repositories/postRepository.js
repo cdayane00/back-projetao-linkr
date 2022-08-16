@@ -14,7 +14,7 @@ export class PostRepository {
     return connection.query(query);
   }
 
-  static async getPosts() {
+  static async getPosts(userId) {
     const query = {
       text: `
       SELECT
@@ -34,10 +34,13 @@ export class PostRepository {
         LEFT JOIN
           likes ON posts.id = likes."postId"
         LEFT JOIN users AS users_likes ON likes."userId" = users_likes.id
+        JOIN followers ON posts."userId" = followers."followedId"
+        WHERE "whoFollow" = $1
       GROUP BY posts.id, users.id
       ORDER BY posts."createdAt" DESC
       LIMIT 20;
       `,
+      values: [userId],
     };
     return connection.query(query);
   }
