@@ -37,3 +37,34 @@ CREATE TABLE "postsHashtags" (
     "hashtagId" INTEGER NOT NULL REFERENCES hashtags(id),
     "createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
 );
+
+CREATE TABLE "followers" (
+	"id" SERIAL PRIMARY KEY NOT NULL,
+	"whoFollow" INTEGER NOT NULL REFERENCES users(id),
+	"followedId" INTEGER NOT NULL REFERENCES users(id),
+	"createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
+) ;
+
+
+
+CREATE TABLE "shares" (
+	"id" SERIAL PRIMARY KEY NOT NULL,
+	"whoShared" INTEGER NOT NULL REFERENCES users(id),
+	"postId" INTEGER NOT NULL REFERENCES posts(id),
+	"createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+
+
+CREATE TABLE "comments" (
+	"id" SERIAL PRIMARY KEY NOT NULL,
+	"whoCommented" INTEGER NOT NULL REFERENCES users(id),
+	"postId" INTEGER NOT NULL REFERENCES posts(id),
+	"comment" varchar(255) NOT NULL,
+	"createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+
+
+
+
