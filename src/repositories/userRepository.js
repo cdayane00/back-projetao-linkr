@@ -74,4 +74,38 @@ export class UserRepository {
     );
     return connection.query(query);
   }
+
+  static async thisInteractionExists(userId, id) {
+    const query = sqlstring.format(
+      `
+      SELECT * FROM followers
+      WHERE "whoFollow" = ? AND "followedId" = ?
+      `,
+      [userId, id]
+    );
+    return connection.query(query);
+  }
+
+  static async followThisUser(userId, id) {
+    const query = sqlstring.format(
+      `
+    INSERT INTO followers
+    ("whoFollow", "followedId")
+    VALUES
+    (?, ?)`,
+      [userId, id]
+    );
+    return connection.query(query);
+  }
+
+  static async unfollowThisUser(userId, id) {
+    const query = sqlstring.format(
+      `
+    DELETE FROM followers
+    WHERE "whoFollow" = ? AND "followedId" = ?
+    `,
+      [userId, id]
+    );
+    return connection.query(query);
+  }
 }
