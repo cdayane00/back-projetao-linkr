@@ -35,13 +35,15 @@ export async function createPost(req, res) {
 
 export async function listPosts(req, res) {
   const { userId } = res.locals.user;
+  const { page } = req.query;
+  const limit = page * 10;
   try {
     const {
       rows: [interaction],
     } = await UserRepository.userFollowsSomeone(userId);
 
     if (!interaction) return res.status(200).send(interaction);
-    const { rows } = await PostRepository.getPosts(userId);
+    const { rows } = await PostRepository.getPosts(userId, limit);
     return res.status(200).send(rows);
   } catch (error) {
     return res.status(500).json({ error: error.message });

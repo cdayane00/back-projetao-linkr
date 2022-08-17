@@ -37,10 +37,21 @@ export class UserRepository {
     return connection.query(query);
   }
 
-  static async getUsersByName(name) {
-    const query = `SELECT users.id, users.name, users.photo FROM users WHERE users.name ILIKE ${sqlstring.escape(
+  static async getUsersByName(name, userId) {
+    const query = `SELECT users.id, users.name, users.photo,
+    (case when exists (SELECT * FROM followers WHERE "whoFollow" = ${sqlstring.escape(
+      userId
+    )} 
+    AND "followedId" = users.id)
+    then CAST(1 AS int)
+    else CAST(0 AS int)
+    end) AS "isFollowing"
+    FROM users
+    JOIN followers ON followers."followedId" = users.id
+    WHERE users.name ILIKE ${sqlstring.escape(
       `${name}%`
-    )}`;
+    )} GROUP BY users.id ORDER BY "isFollowing" DESC
+    `;
     return connection.query(query);
   }
 
