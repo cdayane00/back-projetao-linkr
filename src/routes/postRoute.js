@@ -61,7 +61,7 @@ postRouter.post(
 );
 
 postRouter.post(
-  "/post/:postId/comment",
+  "/post/:postId/comments",
   tokenAuth,
   validateUserAndPost,
   sanitizeData,
@@ -70,7 +70,7 @@ postRouter.post(
 );
 
 postRouter.get(
-  "/post/:postId/comment",
+  "/post/:postId/comments",
   tokenAuth,
   validateUserAndPost,
   getPostsComments

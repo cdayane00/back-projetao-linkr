@@ -23,8 +23,6 @@ export async function getPostsComments(req, res) {
     const { rows: commentsFromPost } =
       await CommentsRepository.getCommentByPostId(postId, userId);
 
-    console.log(!!commentsFromPost[0].isFromAuthor);
-
     return res.status(200).send(commentsFromPost);
   } catch (error) {
     console.log(error);

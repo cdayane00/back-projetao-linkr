@@ -23,8 +23,8 @@ export class CommentsRepository {
         (case when exists (SELECT * FROM followers WHERE "whoFollow" = ${SqlString.escape(
           userId
         )} AND "followedId" = comments."whoCommented")
-          then CAST(1 AS int) 
-          else CAST(0 AS int) 
+          then CAST(1 AS int)
+          else CAST(0 AS int)
         end) AS "isFollowing",
         (case when comments."whoCommented" = ${SqlString.escape(
           userId
