@@ -18,23 +18,23 @@ export class CommentsRepository {
     const query = `
       SELECT 
         comments.*,
-        users.name AS username,
-        users.photo AS photo,
+        users_comment.name AS username,
+        users_comment.photo AS photo,
         (case when exists (SELECT * FROM followers WHERE "whoFollow" = ${SqlString.escape(
           userId
         )} AND "followedId" = comments."whoCommented")
           then CAST(1 AS int)
           else CAST(0 AS int)
         end) AS "isFollowing",
-        (case when comments."whoCommented" = ${SqlString.escape(
-          userId
-        )} then CAST(1 AS int) else CAST(0 AS int) end) AS "isFromAuthor"
+        (case when comments."whoCommented" = posts."userId" then CAST(1 AS int) else CAST(0 AS int) end) AS "isFromAuthor"
       FROM
         comments
           JOIN
             posts ON comments."postId" = posts.id
           JOIN
-          users ON posts."userId" = users.id
+            users ON posts."userId" = users.id
+          JOIN
+		  	    users as users_comment ON comments."whoCommented" = users_comment.id
       WHERE comments."postId" = ${SqlString.escape(postId)}
       ORDER BY comments."createdAt" ASC`;
 

@@ -3,6 +3,7 @@ import { CommentsRepository } from "../repositories/commentsRepository.js";
 export async function commentOnPost(req, res) {
   const { postId } = req.params;
   const { userId } = res.locals.user;
+
   const { commentText } = res.locals.sanitizedData;
 
   try {
