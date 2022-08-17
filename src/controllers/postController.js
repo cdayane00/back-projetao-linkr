@@ -4,6 +4,7 @@ import { LikesRepository } from "../repositories/likesRepository.js";
 import { PostRepository } from "../repositories/postRepository.js";
 import { buildMultipleInsertsQuery } from "../utils/index.js";
 import { UserRepository } from "../repositories/userRepository.js";
+import { CommentsRepository } from "../repositories/commentsRepository.js";
 
 export async function createPost(req, res) {
   const { userId } = res.locals.user;
@@ -68,6 +69,7 @@ export async function deletePost(req, res) {
     }
 
     await HashtagRepository.deleteAllRelationsPostHashtag(id);
+    await CommentsRepository.deleteAllCommentsRelation(id);
     await LikesRepository.deleteAllLikeRelation(id);
 
     await PostRepository.deletePost(id);

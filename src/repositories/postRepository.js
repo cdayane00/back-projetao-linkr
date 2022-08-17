@@ -25,14 +25,17 @@ export class PostRepository {
         posts."userId",
         users."name" AS "username",
         users."photo" AS "photo",
-        COUNT(likes.id) AS "likeCount",
-        jsonb_agg(jsonb_build_object('userId', likes."userId", 'likedBy', users_likes.name))  AS "postLikesData"
+        COUNT(distinct comments) AS "commentsCount",
+	      COUNT(distinct likes) AS "likeCount",
+        jsonb_agg(distinct jsonb_build_object('userId', likes."userId", 'likedBy', users_likes.name))  AS "postLikesData"
       FROM
         posts
         JOIN 
           users ON posts."userId" = users.id
         LEFT JOIN
           likes ON posts.id = likes."postId"
+        LEFT JOIN 
+		      comments ON comments."postId" = posts.id
         LEFT JOIN users AS users_likes ON likes."userId" = users_likes.id
         JOIN followers ON posts."userId" = followers."followedId"
         WHERE "whoFollow" = $1

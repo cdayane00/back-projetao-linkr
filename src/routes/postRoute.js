@@ -15,6 +15,10 @@ import {
   checkLikeStatus,
   validateUserAndPost,
 } from "../middlewares/likesMiddlewares.js";
+import {
+  commentOnPost,
+  getPostsComments,
+} from "../controllers/commentsController.js";
 
 export const postRouter = Router();
 
@@ -54,4 +58,20 @@ postRouter.post(
   validateUserAndPost,
   checkLikeStatus("dislike"),
   dislikeAPost
+);
+
+postRouter.post(
+  "/post/:postId/comments",
+  tokenAuth,
+  validateUserAndPost,
+  sanitizeData,
+  validateBody("createComment"),
+  commentOnPost
+);
+
+postRouter.get(
+  "/post/:postId/comments",
+  tokenAuth,
+  validateUserAndPost,
+  getPostsComments
 );
