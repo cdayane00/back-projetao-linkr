@@ -40,4 +40,11 @@ export class CommentsRepository {
 
     return connection.query(query);
   }
+
+  static async deleteAllCommentsRelation(postId) {
+    const query = `
+        DELETE FROM comments WHERE "postId" = ${SqlString.escape(postId)}`;
+
+    return connection.query(query);
+  }
 }
