@@ -9,6 +9,7 @@ import {
   updatePost,
   likeAPost,
   dislikeAPost,
+  repostAPost,
 } from "../controllers/postController.js";
 import { handleHashtagsOnPost } from "../middlewares/hashtagMiddlewares.js";
 import {
@@ -74,4 +75,11 @@ postRouter.get(
   tokenAuth,
   validateUserAndPost,
   getPostsComments
+);
+
+postRouter.post(
+  "/post/:postId/shares",
+  tokenAuth,
+  validateUserAndPost,
+  repostAPost
 );
