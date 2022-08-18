@@ -58,40 +58,37 @@ export class UserRepository {
   static async getPostsByUserId(id, offset) {
     const query = sqlstring.format(
       `
-      SELECT
-        posts.id AS "postId",
-        posts."postText",
-        posts."createdAt" AS "postDate",
-        posts."userId",
-        users.name AS "username",
-        users.photo,
-        posts."metaTitle",
-        posts."metaText",
-        posts."metaImage",
-        posts."metaUrl",
-        COUNT(distinct comments) AS "commentsCount",
-	      COUNT(distinct likes) AS "likeCount",
-        jsonb_agg(distinct jsonb_build_object('userId', likes."userId", 'likedBy', users_likes.name))  AS "postLikesData"
-      FROM
-        posts
-        JOIN
-          users ON posts."userId" = users.id
-        LEFT JOIN
-          likes ON posts.id = likes."postId"
-        LEFT JOIN 
-		      comments ON comments."postId" = posts.id
-        LEFT JOIN
-          users AS users_likes ON likes."userId" = users_likes.id
-      WHERE
-        users.id = ?
-      GROUP BY
-        posts.id, users.id
-      ORDER BY
-        posts."createdAt" DESC
+      SELECT POSTS.ID AS "postId",
+      POSTS."postText",
+      POSTS."createdAt" AS "postDate",
+      POSTS."userId",
+      USERS.NAME AS "username",
+      USERS.PHOTO,
+      POSTS."metaTitle",
+      POSTS."metaText",
+      POSTS."metaImage",
+      POSTS."metaUrl",
+      COUNT(DISTINCT COMMENTS) AS "commentsCount",
+      COUNT(DISTINCT LIKES) AS "likeCount",
+      COUNT(DISTINCT SHARES) AS "sharesCount",
+      JSONB_AGG(DISTINCT JSONB_BUILD_OBJECT('userId',
+      LIKES."userId",
+      'likedBy',
+      USERS_LIKES.NAME)) AS "postLikesData"
+      FROM POSTS
+      JOIN USERS ON POSTS."userId" = USERS.ID
+      LEFT JOIN LIKES ON POSTS.ID = LIKES."postId"
+      LEFT JOIN COMMENTS ON COMMENTS."postId" = POSTS.id
+      LEFT JOIN SHARES ON SHARES."postId" = POSTS.ID
+      LEFT JOIN USERS AS USERS_LIKES ON LIKES."userId" = USERS_LIKES.ID
+      WHERE POSTS."userId" = ? OR SHARES."whoShared" = ?
+      GROUP BY POSTS.ID,
+          USERS.ID
+      ORDER BY POSTS."createdAt" DESC
       LIMIT 10
       OFFSET ?
     `,
-      [id, offset]
+      [id, id, offset]
     );
     return connection.query(query);
   }

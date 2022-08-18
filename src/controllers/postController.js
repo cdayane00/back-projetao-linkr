@@ -139,3 +139,24 @@ export async function dislikeAPost(req, res) {
     return res.status(500).json({ error: error.message });
   }
 }
+
+export async function repostAPost(req, res) {
+  console.log("entra");
+  const { postId } = req.params;
+  const { userId } = res.locals.user;
+
+  try {
+    const {
+      rows: [share],
+    } = await PostRepository.validateRepost(userId, postId);
+
+    if (!share) {
+      await PostRepository.createRepost(userId, postId);
+      return res.sendStatus(201);
+    }
+    return res.status(401).send("You can't repost");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: error.message });
+  }
+}

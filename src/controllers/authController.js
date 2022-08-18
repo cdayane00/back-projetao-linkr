@@ -43,8 +43,12 @@ export async function signIn(req, res) {
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
       expiresIn: process.env.EXPIRES_IN,
     });
-
-    return res.status(200).json({ token, photo: user.photo, userId: user.id });
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    return res.status(200).json({ config, photo: user.photo, userId: user.id });
   } catch (error) {
     return res.status(500).json({
       error: error.message,
