@@ -61,7 +61,7 @@ export class HashtagRepository {
     return connection.query(query);
   }
 
-  static async getHashtagsPosts(hashtagName, offset) {
+  static async getHashtagsPosts(hashtagName, limit, offset) {
     const query = {
       text: `
       SELECT
@@ -98,10 +98,10 @@ export class HashtagRepository {
         hashtags.id, posts.id, users.id
       ORDER BY
         posts."createdAt" DESC
-      LIMIT 10
-      OFFSET $2
+      LIMIT $2
+      OFFSET $3
       `,
-      values: [hashtagName, offset],
+      values: [hashtagName, limit, offset],
     };
 
     return connection.query(query);

@@ -55,7 +55,7 @@ export class UserRepository {
     return connection.query(query);
   }
 
-  static async getPostsByUserId(id, offset) {
+  static async getPostsByUserId(id, limit, offset) {
     const query = sqlstring.format(
       `
       SELECT POSTS.ID AS "postId",
@@ -85,10 +85,10 @@ export class UserRepository {
       GROUP BY POSTS.ID,
           USERS.ID
       ORDER BY POSTS."createdAt" DESC
-      LIMIT 10
+      LIMIT ?
       OFFSET ?
     `,
-      [id, id, offset]
+      [id, id, limit, offset]
     );
     return connection.query(query);
   }

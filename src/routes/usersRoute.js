@@ -7,9 +7,9 @@ import {
 } from "../controllers/userController.js";
 import { tokenAuth } from "../middlewares/tokenMiddleware.js";
 
-export const userRoute = Router();
+export const userRouter = Router();
 
-userRoute.get("/user/:id", tokenAuth, getUserById);
-userRoute.get("/users/", tokenAuth, getUsersByName);
-userRoute.post("/user/:id/interaction", tokenAuth, followAnUser);
-userRoute.delete("/user/:id/interaction", tokenAuth, unfollowAnUser);
+userRouter.get("/user/:id", tokenAuth, getUserById);
+userRouter.get("/users/", tokenAuth, getUsersByName);
+userRouter.post("/user/:id/interaction", tokenAuth, followAnUser);
+userRouter.delete("/user/:id/interaction", tokenAuth, unfollowAnUser);
