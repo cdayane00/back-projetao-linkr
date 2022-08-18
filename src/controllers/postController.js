@@ -36,14 +36,21 @@ export async function createPost(req, res) {
 
 export async function listPosts(req, res) {
   const { userId } = res.locals.user;
-  const { page } = req.query;
+  const { page, quantity } = req.query;
+  let limit;
+  if (!quantity) limit = 10;
+  if (quantity) limit = quantity;
   const offset = page * 10;
   try {
     const {
       rows: [interaction],
     } = await UserRepository.userFollowsSomeone(userId);
     if (!interaction) return res.sendStatus(206);
-    const { rows: posts } = await PostRepository.getPosts(userId, offset);
+    const { rows: posts } = await PostRepository.getPosts(
+      userId,
+      limit,
+      offset
+    );
     if (posts.length < 1 && page === "0") {
       return res.sendStatus(204);
     }
