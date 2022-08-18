@@ -55,7 +55,7 @@ export class UserRepository {
     return connection.query(query);
   }
 
-  static async getPostsByUserId(id) {
+  static async getPostsByUserId(id, offset) {
     const query = sqlstring.format(
       `
       SELECT
@@ -88,8 +88,10 @@ export class UserRepository {
         posts.id, users.id
       ORDER BY
         posts."createdAt" DESC
+      LIMIT 10
+      OFFSET ?
     `,
-      [id]
+      [id, offset]
     );
     return connection.query(query);
   }
@@ -130,7 +132,7 @@ export class UserRepository {
 
   static async userFollowsSomeone(userId) {
     const query = {
-      text: `SELECT FROM followers
+      text: `SELECT * FROM followers
       WHERE "whoFollow"= $1`,
       values: [userId],
     };

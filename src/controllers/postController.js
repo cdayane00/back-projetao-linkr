@@ -37,15 +37,17 @@ export async function createPost(req, res) {
 export async function listPosts(req, res) {
   const { userId } = res.locals.user;
   const { page } = req.query;
-  const limit = page * 10;
+  const offset = page * 10;
   try {
     const {
       rows: [interaction],
     } = await UserRepository.userFollowsSomeone(userId);
-
-    if (!interaction) return res.status(200).send(interaction);
-    const { rows } = await PostRepository.getPosts(userId, limit);
-    return res.status(200).send(rows);
+    if (!interaction) return res.sendStatus(206);
+    const { rows: posts } = await PostRepository.getPosts(userId, offset);
+    if (posts.length < 1 && page === "0") {
+      return res.sendStatus(204);
+    }
+    return res.status(200).send(posts);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

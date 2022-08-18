@@ -3,6 +3,8 @@ import { UserRepository } from "../repositories/userRepository.js";
 export async function getUserById(req, res) {
   const { userId } = res.locals.user;
   const { id } = req.params;
+  const { page } = req.query;
+  const offset = page * 10;
   let follow;
   try {
     const {
@@ -24,7 +26,7 @@ export async function getUserById(req, res) {
     if (interaction) {
       follow = { interaction: true };
     }
-    const { rows: posts } = await UserRepository.getPostsByUserId(id);
+    const { rows: posts } = await UserRepository.getPostsByUserId(id, offset);
 
     return res.status(200).json({ user, posts, follow });
   } catch (error) {

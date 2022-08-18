@@ -14,7 +14,7 @@ export class PostRepository {
     return connection.query(query);
   }
 
-  static async getPosts(userId, limit) {
+  static async getPosts(userId, offset) {
     const query = {
       text: `
       SELECT
@@ -41,9 +41,10 @@ export class PostRepository {
         WHERE "whoFollow" = $1
       GROUP BY posts.id, users.id
       ORDER BY posts."createdAt" DESC
-      LIMIT $2;
+      LIMIT 10
+      OFFSET $2
       `,
-      values: [userId, limit],
+      values: [userId, offset],
     };
     return connection.query(query);
   }
