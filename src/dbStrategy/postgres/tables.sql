@@ -63,8 +63,3 @@ CREATE TABLE "comments" (
 	"comment" varchar(255) NOT NULL,
 	"createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
 );
-
-
-
-
-
