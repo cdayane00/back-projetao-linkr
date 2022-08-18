@@ -55,7 +55,7 @@ export class UserRepository {
     return connection.query(query);
   }
 
-  static async getPostsByUserId(id) {
+  static async getPostsByUserId(id, offset) {
     const query = sqlstring.format(
       `
       SELECT POSTS.ID AS "postId",
@@ -72,7 +72,6 @@ export class UserRepository {
       COUNT(DISTINCT LIKES) AS "likeCount",
       COUNT(DISTINCT SHARES) AS "sharesCount",
       JSONB_AGG(DISTINCT JSONB_BUILD_OBJECT('userId',
-
       LIKES."userId",
       'likedBy',
       USERS_LIKES.NAME)) AS "postLikesData"
@@ -85,9 +84,11 @@ export class UserRepository {
       WHERE POSTS."userId" = ? OR SHARES."whoShared" = ?
       GROUP BY POSTS.ID,
           USERS.ID
-      ORDER BY POSTS."createdAt" DESC;
+      ORDER BY POSTS."createdAt" DESC
+      LIMIT 10
+      OFFSET ?
     `,
-      [id, id]
+      [id, id, offset]
     );
     return connection.query(query);
   }
@@ -128,7 +129,7 @@ export class UserRepository {
 
   static async userFollowsSomeone(userId) {
     const query = {
-      text: `SELECT FROM followers
+      text: `SELECT * FROM followers
       WHERE "whoFollow"= $1`,
       values: [userId],
     };

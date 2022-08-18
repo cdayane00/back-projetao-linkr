@@ -2,17 +2,18 @@ import { HashtagRepository } from "../repositories/hashtagRepository.js";
 
 export async function getPostsByHashtagName(req, res) {
   const { hashtag } = res.locals;
-
+  const { page } = req.query;
+  const offset = page * 10;
   try {
     const { hashtag: name } = hashtag;
 
     const { rows: postsByHashtag } = await HashtagRepository.getHashtagsPosts(
-      name
+      name,
+      offset
     );
 
     return res.status(200).send(postsByHashtag);
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ error: error.message });
   }
 }
@@ -24,7 +25,6 @@ export async function listTrendingHashtags(_req, res) {
 
     return res.status(200).send(hashtagsList);
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ error: error.message });
   }
 }

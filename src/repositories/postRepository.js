@@ -15,7 +15,7 @@ export class PostRepository {
     return connection.query(query);
   }
 
-  static async getPosts(userId, limit) {
+  static async getPosts(userId, offset) {
     const query = `
       SELECT POSTS.ID AS "postId",
       POSTS."postText",
@@ -55,9 +55,9 @@ export class PostRepository {
           SHARES.ID,
           USERS_WHO_SHARED.ID
       ORDER BY POSTS."createdAt" DESC
-      LIMIT ${sqlstring.escape(limit)}
+      LIMIT 10
+      OFFSET ${sqlstring.escape(offset)}
       `;
-
     return connection.query(query);
   }
 
