@@ -47,7 +47,7 @@ export class UserRepository {
     else CAST(0 AS int)
     end) AS "isFollowing"
     FROM users
-    JOIN followers ON followers."followedId" = users.id
+    LEFT JOIN followers ON followers."followedId" = users.id
     WHERE users.name ILIKE ${sqlstring.escape(
       `${name}%`
     )} GROUP BY users.id ORDER BY "isFollowing" DESC
