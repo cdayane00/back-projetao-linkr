@@ -5,7 +5,7 @@ export async function getUserById(req, res) {
   const { id } = req.params;
   const { page, quantity } = req.query;
   let limit;
-  if (!quantity) limit = 10;
+  if (quantity === 0) limit = 10;
   if (quantity) limit = quantity;
   const offset = page * 10;
   let follow;
