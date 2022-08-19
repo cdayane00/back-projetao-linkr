@@ -148,7 +148,6 @@ export async function dislikeAPost(req, res) {
 }
 
 export async function repostAPost(req, res) {
-  console.log("entra");
   const { postId } = req.params;
   const { userId } = res.locals.user;
 
