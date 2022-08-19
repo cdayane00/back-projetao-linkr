@@ -49,6 +49,7 @@ export async function getUsersByName(req, res) {
 
   try {
     const { rows: user } = await UserRepository.getUsersByName(name, userId);
+    console.log(user);
     if (name === "") {
       return res.status(200).json([]);
     }
