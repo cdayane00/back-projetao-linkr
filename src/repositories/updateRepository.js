@@ -11,7 +11,6 @@ export class UpdateRepository {
      `,
       values: [id, timestamp, timestamp],
     };
-    console.log(timestamp);
     return connection.query(query);
   }
 

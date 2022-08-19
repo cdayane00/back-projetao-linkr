@@ -79,6 +79,7 @@ export async function deletePost(req, res) {
     await HashtagRepository.deleteAllRelationsPostHashtag(id);
     await CommentsRepository.deleteAllCommentsRelation(id);
     await LikesRepository.deleteAllLikeRelation(id);
+    await PostRepository.deleteAllRepostRelations(id);
 
     await PostRepository.deletePost(id);
     return res.sendStatus(204);
@@ -147,7 +148,6 @@ export async function dislikeAPost(req, res) {
 }
 
 export async function repostAPost(req, res) {
-  console.log("entra");
   const { postId } = req.params;
   const { userId } = res.locals.user;
 
