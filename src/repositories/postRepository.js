@@ -141,4 +141,13 @@ export class PostRepository {
     };
     return connection.query(query);
   }
+
+  static async deleteAllRepostRelations(postId) {
+    const query = {
+      text: `DELETE FROM SHARES WHERE "postId" = $1`,
+      values: [postId],
+    };
+
+    return connection.query(query);
+  }
 }

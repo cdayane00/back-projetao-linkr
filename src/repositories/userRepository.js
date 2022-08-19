@@ -89,8 +89,7 @@ export class UserRepository {
               LEFT JOIN FOLLOWERS ON POSTS."userId" = FOLLOWERS."followedId"
               WHERE POSTS."userId" = ?
               GROUP BY POSTS.ID,
-                USERS.ID,
-                  SHARES.ID)
+                USERS.ID)
             UNION ALL
               (SELECT POSTS.ID AS "postId",
                   POSTS."postText",
