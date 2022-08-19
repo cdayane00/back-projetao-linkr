@@ -3,9 +3,7 @@ import { HashtagRepository } from "../repositories/hashtagRepository.js";
 export async function getPostsByHashtagName(req, res) {
   const { hashtag } = res.locals;
   const { page, quantity } = req.query;
-  let limit;
-  if (!quantity) limit = 10;
-  if (quantity) limit = quantity;
+  const limit = quantity;
   const offset = page * 10;
   try {
     const { hashtag: name } = hashtag;
