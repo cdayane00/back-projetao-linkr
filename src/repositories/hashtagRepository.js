@@ -77,6 +77,7 @@ export class HashtagRepository {
         posts."metaUrl",
         COUNT(distinct comments) AS "commentsCount",
 	      COUNT(distinct likes) AS "likeCount",
+        COUNT(DISTINCT SHARES_COUNT) AS "sharesCount",
         jsonb_agg(distinct jsonb_build_object('userId', likes."userId", 'likedBy', users_likes.name))  AS "postLikesData"
       FROM
         "postsHashtags"
@@ -92,6 +93,7 @@ export class HashtagRepository {
 		      comments ON comments."postId" = posts.id
         LEFT JOIN
           users AS users_likes ON likes."userId" = users_likes.id
+        LEFT JOIN SHARES AS SHARES_COUNT ON SHARES_COUNT."postId" = POSTS.ID
       WHERE
         hashtags.hashtag = $1
       GROUP BY
